@@ -3,21 +3,27 @@ pipeline {
   stages {
     stage('Build') {
       parallel {
-        stage('Build') {
+        stage('Build 1 Parallel') {
           steps {
-            echo 'Hello World. Build Stage'
+            echo 'Hello World. Build Stage 1'
           }
         }
-        stage('Buil 2 Parellel') {
+        stage('Build 2 Parellel') {
           steps {
             sleep 3
+            echo 'Hello World. Build Stage 2'
+          }
+        }
+        stage('Build 3 Parallel') {
+          steps {
+            echo 'Hello World. Build Stage 3'
           }
         }
       }
     }
     stage('Push') {
       steps {
-        echo 'Pushing'
+        echo 'Pushing Build'
       }
     }
     stage('Test1') {
