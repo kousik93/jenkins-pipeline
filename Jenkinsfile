@@ -14,11 +14,6 @@ pipeline {
             echo 'Hello World. Build Stage 2'
           }
         }
-        stage('Build 3 Parallel') {
-          steps {
-            echo 'Hello World. Build Stage 3'
-          }
-        }
       }
     }
     stage('Push') {
@@ -26,7 +21,7 @@ pipeline {
         echo 'Pushing Build'
       }
     }
-    stage('Test1') {
+    stage('Test') {
       parallel {
         stage('Test1') {
           steps {
@@ -44,14 +39,18 @@ pipeline {
             error 'Test 3 failed!'
           }
           post {
-                          always {
-                              echo 'I will always say Hello again! - From Test 3'
-                          }
-                          failure {
-                              echo "Test 3 failed! "
-                              export TEST3_RESULT= "false"
-                          }
-                      }
+            always {
+               echo 'I will always say Hello again! - From Test 3'
+            }
+            failure {
+               sh '''
+               echo "Test 3 failed! "
+               export TEST3_RESULT= "false"
+               echo "Test 3 result is::"
+               echo ${TEST3_RESULT}
+               '''
+            }
+          }
         }
 
         stage('Test4') {
@@ -65,27 +64,28 @@ pipeline {
         stage('Test5') {
           steps {
             sh '''echo "Running test5. Value of test5 env is:"
-echo ${test5}
-if [ ${test5} == "true" ]
-then
-   echo "Test5 passed"
-else
-   exit 42
-fi'''
+                  echo ${test5}
+                  if [ ${test5} == "true" ]
+                  then
+                    echo "Test5 passed"
+                  else
+                    exit 42
+                  fi'''
           }
           post {
-                                  always {
-                                      echo 'I will always say Hello again! - From Test 5'
-                                  }
-                                  failure {
-
-                                      sh '''echo "Test 5 failed! "
-                                      export TEST5_RESULT= "false"
-                                      echo ${TEST5_RESULT}'''
-                                  }
-                              }
+            always {
+              echo 'I will always say Hello again! - From Test 5'
+            }
+            failure {
+               sh '''echo "Test 5 failed! "
+               export TEST5_RESULT= "false"
+               echo ${TEST5_RESULT}'''
+             }
+            success {
+              echo "Test 5 succeeded"
+            }
+          }
         }
-
       }
     }
     stage('deploy') {
