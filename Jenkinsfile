@@ -36,7 +36,9 @@ pipeline {
         }
         stage('Test3') {
           steps {
-            error 'Test 3 failed!'
+            catchError() {
+                error 'Test 3 failed!'
+            }
           }
           post {
             always {
@@ -65,14 +67,16 @@ pipeline {
         }
         stage('Test5') {
           steps {
+          catchError() {
             sh '''echo "Running test5. Value of test5 env is:"
-                  echo ${test5}
-                  if [ ${test5} == "true" ]
-                  then
-                    echo "Test5 passed"
-                  else
-                    exit 42
-                  fi'''
+                              echo ${test5}
+                              if [ ${test5} == "true" ]
+                              then
+                                echo "Test5 passed"
+                              else
+                                exit 42
+                              fi'''
+          }
           }
           post {
             always {
