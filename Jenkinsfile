@@ -108,6 +108,6 @@ pipeline {
     }
   }
   environment {
-    test5 = 'false'
+    test5 = 'true'
   }
 }
