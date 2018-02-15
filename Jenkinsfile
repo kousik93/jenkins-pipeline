@@ -27,6 +27,7 @@ pipeline {
           steps {
             catchError() {
                 echo 'Hello 2'
+                currentBuild.result = 'SUCCESS'
             }
           }
           post {
