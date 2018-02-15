@@ -45,9 +45,9 @@ pipeline {
                echo 'I will always say Hello again! - From Test 3'
             }
             failure {
-            script {
-             env.TEST3_RESULT = "false"
-            }
+                script {
+                    env.TEST3_RESULT = "false"
+                }
                sh '''
                echo "Test 3 failed! "
                echo "Test 3 result is::"
@@ -101,7 +101,9 @@ pipeline {
       steps {
       sh '''echo "Test 5 Result is: "
             echo ${env.TEST5_RESULT}
-        echo 'Deploying'
+            echo "Test 3 Result is: "
+            echo ${env.TEST3_RESULT}'''
+            echo 'Deploying'
       }
     }
   }
