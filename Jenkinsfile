@@ -47,7 +47,7 @@ pipeline {
                echo "TEst 3 result befor failure is:"
                echo ${TEST3_RESULT}
                echo "Test 3 failed! "
-               export TEST3_RESULT= "false"
+               export TEST3_RESULT="false"
                echo "Test 3 result is::"
                echo ${TEST3_RESULT}
                '''
@@ -80,7 +80,7 @@ pipeline {
             }
             failure {
                sh '''echo "Test 5 failed! "
-               export TEST5_RESULT= "false"
+               export TEST5_RESULT="false"
                echo ${TEST5_RESULT}'''
              }
             success {
