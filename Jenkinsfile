@@ -45,13 +45,13 @@ pipeline {
                echo 'I will always say Hello again! - From Test 3'
             }
             failure {
+            script {
+             env.TEST3_RESULT = "false"
+            }
                sh '''
-               echo "TEst 3 result befor failure is:"
-               echo ${TEST3_RESULT}
                echo "Test 3 failed! "
-               export TEST3_RESULT="false"
                echo "Test 3 result is::"
-               echo ${TEST3_RESULT}
+               echo ${env.TEST3_RESULT}
                '''
             }
           }
@@ -83,9 +83,11 @@ pipeline {
               echo 'I will always say Hello again! - From Test 5'
             }
             failure {
+            script {
+              env.TEST3_RESULT = "false"
+             }
                sh '''echo "Test 5 failed! "
-               export TEST5_RESULT="false"
-               echo ${TEST5_RESULT}'''
+               echo ${env.TEST5_RESULT}'''
              }
             success {
               echo "Test 5 succeeded"
@@ -97,6 +99,8 @@ pipeline {
     stage('deploy') {
     when { environment name: 'TEST5_RESULT', value: 'true' }
       steps {
+      sh '''echo "Test 5 Result is: "
+            echo ${env.TEST5_RESULT}
         echo 'Deploying'
       }
     }
