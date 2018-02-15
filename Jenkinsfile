@@ -44,6 +44,15 @@ pipeline {
             error 'Test 3 failed!'
           }
         }
+        post {
+                always {
+                    echo 'I will always say Hello again! - From Test 3'
+                }
+                failure {
+                    echo "Test 3 failed! "
+                    export TEST3_RESULT= "false"
+                }
+            }
         stage('Test4') {
           steps {
             catchError() {
@@ -64,15 +73,30 @@ else
 fi'''
           }
         }
+        post {
+                        always {
+                            echo 'I will always say Hello again! - From Test 5'
+                        }
+                        failure {
+                            echo "Test 5 failed! "
+                            export TEST5_RESULT= "false"
+                        }
+                    }
       }
     }
     stage('deploy') {
+    when { environment name: 'TEST5_RESULT', value: 'true' }
       steps {
         echo 'Deploying'
       }
     }
   }
   environment {
-    test5 = 'false'
+    test5 = 'true'
+    TEST1_RESULT = 'true'
+    TEST2_RESULT = 'true'
+    TEST3_RESULT = 'true'
+    TEST4_RESULT = 'true'
+    TEST5_RESULT = 'true'
   }
 }
