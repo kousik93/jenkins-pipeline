@@ -33,6 +33,31 @@ pipeline {
             echo 'Testing 2 again'
           }
         }
+        stage('Test3') {
+          steps {
+            error 'Test 3 failed!'
+          }
+        }
+        stage('Test4') {
+          steps {
+            catchError() {
+              echo 'Test4 Child Step'
+            }
+            
+          }
+        }
+        stage('Test5') {
+          steps {
+            sh '''echo "Running test5. Value of test5 env is:"
+echo ${test5}
+if [ ${test5} == "true" ]
+then
+   echo "Test5 passed"
+else
+   exit 42
+fi'''
+          }
+        }
       }
     }
     stage('deploy') {
@@ -40,5 +65,8 @@ pipeline {
         echo 'Deploying'
       }
     }
+  }
+  environment {
+    test5 = 'true'
   }
 }
