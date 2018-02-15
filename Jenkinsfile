@@ -109,10 +109,5 @@ pipeline {
   }
   environment {
     test5 = 'false'
-    TEST1_RESULT = 'true'
-    TEST2_RESULT = 'true'
-    TEST3_RESULT = 'true'
-    TEST4_RESULT = 'true'
-    TEST5_RESULT = 'true'
   }
 }
