@@ -23,15 +23,20 @@ pipeline {
     }
     stage('Test') {
       parallel {
-        stage('Test1') {
-          steps {
-            echo 'Testing 1'
-          }
-        }
         stage('Test2') {
           steps {
-            echo 'Testing2'
-            echo 'Testing 2 again'
+            catchError() {
+                echo 'Hello 2'
+            }
+          }
+          post {
+
+            failure {
+                echo "test2 failed"
+            }
+            success{
+                echo "test2 success"
+            }
           }
         }
         stage('Test3') {
