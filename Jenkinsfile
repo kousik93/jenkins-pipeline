@@ -25,13 +25,15 @@ pipeline {
       parallel {
         stage('Test2') {
           steps {
-            script{
-                if (env.test2 == 'true'){
-                    exit 0;
-                } else {
-                    exit 40;
-                }
-            }
+          echo "Running Test 2"
+            sh '''echo "Running test 2. Value of test 2 env is:"
+                  echo ${test2}
+                  if [ ${test2} == "true" ]
+                  then
+                  echo "Test 2 passed"
+                  else
+                  exit 42
+                  fi'''
           }
           post {
             failure {
@@ -42,28 +44,6 @@ pipeline {
             }
             success{
                 echo "test2 success"
-            }
-          }
-        }
-        stage('Test3') {
-          steps {
-            catchError() {
-                error 'Test 3 failed!'
-            }
-          }
-          post {
-            always {
-               echo 'I will always say Hello again! - From Test 3'
-            }
-            failure {
-                script {
-                    env.TEST3_RESULT = "false"
-                }
-               sh '''
-               echo "Test 3 failed! "
-               echo "Test 3 result is::"
-               echo ${TEST3_RESULT}
-               '''
             }
           }
         }
