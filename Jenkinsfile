@@ -43,16 +43,17 @@ pipeline {
           steps {
             error 'Test 3 failed!'
           }
+          post {
+                          always {
+                              echo 'I will always say Hello again! - From Test 3'
+                          }
+                          failure {
+                              echo "Test 3 failed! "
+                              export TEST3_RESULT= "false"
+                          }
+                      }
         }
-        post {
-                always {
-                    echo 'I will always say Hello again! - From Test 3'
-                }
-                failure {
-                    echo "Test 3 failed! "
-                    export TEST3_RESULT= "false"
-                }
-            }
+
         stage('Test4') {
           steps {
             catchError() {
@@ -72,16 +73,18 @@ else
    exit 42
 fi'''
           }
+          post {
+                                  always {
+                                      echo 'I will always say Hello again! - From Test 5'
+                                  }
+                                  failure {
+                                      echo "Test 5 failed! "
+                                      export TEST5_RESULT= "false"
+                                      echo ${TEST5_RESULT}
+                                  }
+                              }
         }
-        post {
-                        always {
-                            echo 'I will always say Hello again! - From Test 5'
-                        }
-                        failure {
-                            echo "Test 5 failed! "
-                            export TEST5_RESULT= "false"
-                        }
-                    }
+
       }
     }
     stage('deploy') {
