@@ -73,6 +73,7 @@ pipeline {
                               if [ ${test5} == "true" ]
                               then
                                 echo "Test5 passed"
+                                exit 0
                               else
                                 exit 42
                               fi'''
@@ -83,14 +84,15 @@ pipeline {
               echo 'I will always say Hello again! - From Test 5'
             }
             failure {
-            script {
-              env.TEST5_RESULT = "false"
-             }
+                script {
+                    env.TEST5_RESULT = "false"
+                    }
                sh '''echo "Test 5 failed! "
                echo ${TEST5_RESULT}'''
              }
             success {
               echo "Test 5 succeeded"
+              exit 0
             }
           }
         }
