@@ -78,9 +78,10 @@ fi'''
                                       echo 'I will always say Hello again! - From Test 5'
                                   }
                                   failure {
-                                      echo "Test 5 failed! "
+
+                                      sh '''echo "Test 5 failed! "
                                       export TEST5_RESULT= "false"
-                                      echo ${TEST5_RESULT}
+                                      echo ${TEST5_RESULT}'''
                                   }
                               }
         }
