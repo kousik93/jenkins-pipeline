@@ -10,7 +10,6 @@ pipeline {
         }
         stage('Build 2 Parellel') {
           steps {
-            sleep 3
             echo 'Hello World. Build Stage 2'
           }
         }
@@ -19,13 +18,14 @@ pipeline {
     stage('Push') {
       steps {
         echo 'Pushing Build'
+        sleep 3
       }
     }
     stage('Test') {
       parallel {
         stage('Test2') {
           steps {
-          echo "Running Test 2"
+            echo "Running Test 2"
             sh '''echo "Running test 2. Value of test 2 env is:"
                   echo ${test2}
                   if [ ${test2} == "true" ]
@@ -44,6 +44,9 @@ pipeline {
             }
             success{
                 echo "test2 success"
+                script {
+                  env.TEST2_RESULT = "true"
+                }
             }
           }
         }
