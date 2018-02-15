@@ -44,6 +44,8 @@ pipeline {
             }
             failure {
                sh '''
+               echo "TEst 3 result befor failure is:"
+               echo ${TEST3_RESULT}
                echo "Test 3 failed! "
                export TEST3_RESULT= "false"
                echo "Test 3 result is::"
