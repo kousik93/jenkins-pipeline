@@ -51,7 +51,7 @@ pipeline {
                sh '''
                echo "Test 3 failed! "
                echo "Test 3 result is::"
-               echo ${env.TEST3_RESULT}
+               echo ${TEST3_RESULT}
                '''
             }
           }
@@ -84,10 +84,10 @@ pipeline {
             }
             failure {
             script {
-              env.TEST3_RESULT = "false"
+              env.TEST5_RESULT = "false"
              }
                sh '''echo "Test 5 failed! "
-               echo ${env.TEST5_RESULT}'''
+               echo ${TEST5_RESULT}'''
              }
             success {
               echo "Test 5 succeeded"
@@ -100,9 +100,9 @@ pipeline {
     when { environment name: 'TEST5_RESULT', value: 'true' }
       steps {
       sh '''echo "Test 5 Result is: "
-            echo ${env.TEST5_RESULT}
+            echo ${TEST5_RESULT}
             echo "Test 3 Result is: "
-            echo ${env.TEST3_RESULT}'''
+            echo ${TEST3_RESULT}'''
             echo 'Deploying'
       }
     }
