@@ -25,15 +25,20 @@ pipeline {
       parallel {
         stage('Test2') {
           steps {
-            catchError() {
-                echo 'Hello 2'
-                currentBuild.result = 'SUCCESS'
+            script{
+                if (env.test2 == 'true'){
+                    exit 0;
+                } else {
+                    exit 40;
+                }
             }
           }
           post {
-
             failure {
                 echo "test2 failed"
+                script {
+                  env.TEST2_RESULT = "false"
+                }
             }
             success{
                 echo "test2 success"
@@ -62,53 +67,13 @@ pipeline {
             }
           }
         }
-
-        stage('Test4') {
-          steps {
-            catchError() {
-              echo 'Test4 Child Step'
-            }
-            
-          }
-        }
-        stage('Test5') {
-          steps {
-          catchError() {
-            sh '''echo "Running test5. Value of test5 env is:"
-                              echo ${test5}
-                              if [ ${test5} == "true" ]
-                              then
-                                echo "Test5 passed"
-                                exit 0
-                              else
-                                exit 42
-                              fi'''
-          }
-          }
-          post {
-            always {
-              echo 'I will always say Hello again! - From Test 5'
-            }
-            failure {
-                script {
-                    env.TEST5_RESULT = "false"
-                    }
-               sh '''echo "Test 5 failed! "
-               echo ${TEST5_RESULT}'''
-             }
-            success {
-              echo "Test 5 succeeded"
-              exit 0
-            }
-          }
-        }
       }
     }
     stage('deploy') {
-    when { environment name: 'TEST5_RESULT', value: 'true' }
+    when { environment name: 'TEST2_RESULT', value: 'true' }
       steps {
-      sh '''echo "Test 5 Result is: "
-            echo ${TEST5_RESULT}
+      sh '''echo "Test 2 Result is: "
+            echo ${TEST2_RESULT}
             echo "Test 3 Result is: "
             echo ${TEST3_RESULT}'''
             echo 'Deploying'
@@ -117,5 +82,6 @@ pipeline {
   }
   environment {
     test5 = 'true'
+    test2 = 'true'
   }
 }
