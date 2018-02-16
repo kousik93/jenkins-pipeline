@@ -41,17 +41,9 @@ pipeline {
             }
           }
           post {
-            failure {
-                echo "test1 failed"
-                script {
-                  env.TEST1_RESULT = "false"
-                }
-            }
-            success{
-                echo "test1 success"
-                script {
-                  env.TEST1_RESULT = "true"
-                }
+            always {
+                echo "test1 status"
+                echo ${TEST1_RESULT}
             }
           }
         }
@@ -71,6 +63,12 @@ pipeline {
                   fi'''
             script{
                 env.TEST2_RESULT = "true"
+            }
+          }
+          post {
+            always {
+                echo "test2 status"
+                echo ${TEST2_RESULT}
             }
           }
         }
