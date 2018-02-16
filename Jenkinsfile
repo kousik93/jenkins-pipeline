@@ -57,9 +57,7 @@ pipeline {
      post {
       always {
        echo "Test 1 Result"
-       sh ''
-       'echo ${TEST1_RESULT}'
-       ''
+       sh '''echo ${TEST1_RESULT}'''
       }
      }
     }
@@ -79,9 +77,7 @@ pipeline {
      post {
       always {
        echo "Test 2 Result"
-       sh ''
-       'echo ${TEST2_RESULT}'
-       ''
+       sh '''echo ${TEST2_RESULT}'''
       }
      }
     }
@@ -94,18 +90,11 @@ pipeline {
     environment name: 'TEST2_RESULT', value: 'true'
    }
    steps {
-    sh ''
-    'echo "Test 2 Result is: "
-    echo $ {
-     TEST2_RESULT
-    }
-    echo "Test 1 Result is: "
-    echo $ {
-     TEST1_RESULT
-    }
-    ''
-    '
-    echo 'Deploying'
+    sh '''echo "Test 2 Result is: "
+          echo $ {TEST2_RESULT}
+          echo "Test 1 Result is: "
+          echo $ {TEST1_RESULT}'''
+          echo 'Deploying'
    }
   }
  }
