@@ -25,8 +25,20 @@ pipeline {
       parallel {
         stage('Test1') {
           steps {
-            echo "Running Test 1"
-            error 'Test 1 failed!'
+            script{
+                env.TEST1_RESULT = "false"
+            }
+            catchError{
+                echo "Running Test 1"
+
+                script{
+                    if (env.test1 == "false")
+                    error 'Test 1 failed!'
+                }
+                script{
+                    env.TEST1_RESULT = "true"
+                }
+            }
           }
           post {
             failure {
