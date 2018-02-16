@@ -8,7 +8,7 @@ pipeline {
             echo 'Hello World. Build Stage 1'
           }
         }
-        stage('Build 2 Parellel') {
+        stage('Build 2 Parallel') {
           steps {
             echo 'Hello World. Build Stage 2'
           }
@@ -23,6 +23,25 @@ pipeline {
     }
     stage('Test') {
       parallel {
+        stage('Test1') {
+          steps {
+            echo "Running Test 1"
+          }
+          post {
+            failure {
+                echo "test1 failed"
+                script {
+                  env.TEST1_RESULT = "false"
+                }
+            }
+            success{
+                echo "test1 success"
+                script {
+                  env.TEST1_RESULT = "true"
+                }
+            }
+          }
+        }
         stage('Test2') {
           steps {
             echo "Running Test 2"
