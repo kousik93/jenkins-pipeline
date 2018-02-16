@@ -53,7 +53,7 @@ pipeline {
       }
     }
     stage('deploy') {
-    when { environment name: 'TEST2_RESULT', value: 'true' }
+    when { environment name: 'TEST5_RESULT', value: 'true' }
       steps {
       sh '''echo "Test 2 Result is: "
             echo ${TEST2_RESULT}
@@ -66,5 +66,6 @@ pipeline {
   environment {
     test5 = 'true'
     test2 = 'false'
+    TEST5_RESULT = 'true'
   }
 }
