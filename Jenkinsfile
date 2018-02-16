@@ -99,7 +99,7 @@ pipeline {
   }
  }
  environment {
-  test2 = 'true'
-  test1 = 'false'
+  test2 = 'false'
+  test1 = 'true'
  }
 }
