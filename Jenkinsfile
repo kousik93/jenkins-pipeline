@@ -51,7 +51,7 @@ pipeline {
           steps {
             echo "Running Test 2. Setting to fail."
             script{
-                env.Test2_RESULT = "false"
+                env.TEST2_RESULT = "false"
             }
             sh '''echo "Running test 2. Value of test 2 env is:"
                   echo ${test2}
