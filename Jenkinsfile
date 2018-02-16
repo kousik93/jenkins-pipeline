@@ -43,7 +43,7 @@ pipeline {
           post {
             always {
                 echo "test1 status"
-                echo ${TEST1_RESULT}
+                sh '''echo ${TEST1_RESULT}'''
             }
           }
         }
@@ -68,7 +68,7 @@ pipeline {
           post {
             always {
                 echo "test2 status"
-                echo ${TEST2_RESULT}
+                sh '''echo ${TEST2_RESULT}'''
             }
           }
         }
