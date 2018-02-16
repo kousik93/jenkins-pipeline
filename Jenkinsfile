@@ -26,9 +26,7 @@ pipeline {
         stage('Test1') {
           steps {
             echo "Running Test 1"
-            sh'''echo "Hello"
-                 echo "Running test 1. Value of test 1 env is:"
-                 echo ${test1}'''
+            error 'Test 1 failed!'
           }
           post {
             failure {
