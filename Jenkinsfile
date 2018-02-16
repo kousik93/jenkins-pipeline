@@ -26,6 +26,7 @@ pipeline {
         stage('Test1') {
           steps {
             echo "Running Test 1"
+            sh'''echo "Hello"'''
           }
           post {
             failure {
