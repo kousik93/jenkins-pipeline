@@ -59,6 +59,7 @@ pipeline {
                   then
                   echo "Test 2 passed"
                   else
+                  echo "EXITING"
                   exit 42
                   fi'''
             script{
