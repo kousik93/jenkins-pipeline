@@ -84,7 +84,8 @@ pipeline {
    }
   }
   // In the deploy stage, I only check Test 2 Result.
-  // It will run as long as Test 2 passed and doesnt depend on Test 1
+  // It will run as long as Test 2 passed
+  // This step doesnt depend on Test 1!
   stage('deploy') {
    when {
     environment name: 'TEST2_RESULT', value: 'true'
@@ -100,6 +101,6 @@ pipeline {
  }
  environment {
   test2 = 'false'
-  test1 = 'true'
+  test1 = 'false'
  }
 }
