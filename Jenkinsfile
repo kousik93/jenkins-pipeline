@@ -45,7 +45,10 @@ pipeline {
         }
         stage('Test2') {
           steps {
-            echo "Running Test 2"
+            echo "Running Test 2. Setting to fail."
+            script{
+                env.Test2_RESULT = "false"
+            }
             sh '''echo "Running test 2. Value of test 2 env is:"
                   echo ${test2}
                   if [ ${test2} == "true" ]
@@ -54,19 +57,8 @@ pipeline {
                   else
                   exit 42
                   fi'''
-          }
-          post {
-            failure {
-                echo "test2 failed"
-                script {
-                  env.TEST2_RESULT = "false"
-                }
-            }
-            success{
-                echo "test2 success"
-                script {
-                  env.TEST2_RESULT = "true"
-                }
+            script{
+                env.TEST2_RESULT = "true"
             }
           }
         }
