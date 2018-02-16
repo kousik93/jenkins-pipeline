@@ -76,15 +76,13 @@ pipeline {
       steps {
       sh '''echo "Test 2 Result is: "
             echo ${TEST2_RESULT}
-            echo "Test 3 Result is: "
-            echo ${TEST3_RESULT}'''
+            echo "Test 1 Result is: "
+            echo ${TEST1_RESULT}'''
             echo 'Deploying'
       }
     }
   }
   environment {
-    test5 = 'true'
-    test2 = 'false'
-    TEST5_RESULT = 'true'
+    test2 = 'true'
   }
 }
