@@ -61,10 +61,13 @@ pipeline {
                   else
                   echo "EXITING"
                   exit 42
-                  fi'''
+                  fi
+                  echo "hello.."'''
+            sh '''echo "hello2"'''
             script{
                 env.TEST2_RESULT = "true"
             }
+            sh '''echo "hello3"'''
           }
           post {
             always {
