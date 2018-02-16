@@ -1,72 +1,106 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      parallel {
-        stage('Build') {
-          steps {
-            echo 'Hello World. Build Stage'
-          }
-        }
-        stage('Buil 2 Parellel') {
-          steps {
-            sleep 3
-          }
-        }
-      }
+ agent any
+ stages {
+
+ //Performing 2 builds in parallel
+  stage('Build') {
+   parallel {
+    stage('Build 1 Parallel') {
+     steps {
+      echo 'Hello World. Build Stage 1'
+     }
     }
-    stage('Push') {
-      steps {
-        echo 'Pushing'
-      }
+    stage('Build 2 Parallel') {
+     steps {
+      echo 'Hello World. Build Stage 2'
+     }
     }
+   }
+  }
+
+  //Unconditionally pushing the build
+  stage('Push') {
+   steps {
+    echo 'Pushing Build'
+    sleep 3
+   }
+  }
+
+  /*
+  In this we have 2 tests running in parallel.
+  Both tests will read an ENV variable and determine if they want to fail or not.
+  To achieve AND and OR conditions in deploy step next, we need to:
+  - Wrap our stage code in catchError{} (This will continue building pipeline even if the stage fails)
+  - At last, we should set an ENV variable suggesting this stage passed
+  */
+  stage('Test') {
+   parallel {
     stage('Test1') {
-      parallel {
-        stage('Test1') {
-          steps {
-            echo 'Testing 1'
-          }
-        }
-        stage('Test2') {
-          steps {
-            echo 'Testing2'
-            echo 'Testing 2 again'
-          }
-        }
-        stage('Test3') {
-          steps {
-            error 'Test 3 failed!'
-          }
-        }
-        stage('Test4') {
-          steps {
-            catchError() {
-              echo 'Test4 Child Step'
-            }
-            
-          }
-        }
-        stage('Test5') {
-          steps {
-            sh '''echo "Running test5. Value of test5 env is:"
-echo ${test5}
-if [ ${test5} == "true" ]
-then
-   echo "Test5 passed"
-else
-   exit 42
-fi'''
-          }
+     steps {
+
+      catchError {
+       echo "Running Test 1"
+       script {
+        if (env.test1 == "false")
+         error 'Test 1 failed!'
+       }
+       // If stage succeded, set ENV variable
+       script {
+        env.TEST1_RESULT = "true"
+       }
+      }
+     }
+     /*Check what var value is.
+     This post block suffers from race condition issues when a part of parallel execution
+     So cannot use failure{} and success{} blocks here
+     */
+     post {
+      always {
+       echo "Test 1 Result"
+       sh '''echo ${TEST1_RESULT}'''
+      }
+     }
+    }
+    stage('Test2') {
+     steps {
+      catchError {
+       echo "Running Test 2"
+       script {
+        if (env.test2 == "false")
+         error 'Test 2 failed!'
+       }
+        script {
+         env.TEST2_RESULT = "true"
         }
       }
-    }
-    stage('deploy') {
-      steps {
-        echo 'Deploying'
+     }
+     post {
+      always {
+       echo "Test 2 Result"
+       sh '''echo ${TEST2_RESULT}'''
       }
+     }
     }
+   }
   }
-  environment {
-    test5 = 'true'
+  // In the deploy stage, I only check Test 2 Result.
+  // It will run as long as Test 2 passed
+  // This step doesnt depend on Test 1!
+  stage('deploy') {
+   when {
+    environment name: 'TEST2_RESULT', value: 'true'
+   }
+   steps {
+    sh '''echo "Test 2 Result is: "
+          echo ${TEST2_RESULT}
+          echo "Test 1 Result is: "
+          echo ${TEST1_RESULT}'''
+          echo 'Deploying'
+   }
   }
+ }
+ environment {
+  test2 = 'true'
+  test1 = 'false'
+ }
 }
