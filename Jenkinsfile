@@ -91,6 +91,6 @@ pipeline {
   }
   environment {
     test2 = 'true'
-    test1 = 'true'
+    test1 = 'false'
   }
 }
